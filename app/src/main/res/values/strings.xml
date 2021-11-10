@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">TodoAppDesign</string>
+    <!-- App name & Titles -->
+    <string name="app_name">Todo App</string>
+    <string name="create_task_title">Create a New Task</string>
+    <string name="edit_task_title">Edit Task</string>
+    <string name="add_task">Add new task</string>
+
+    <!-- Form labels Create New Task & Edit Task -->
+    <string name="title_label">Title</string>
+    <string name="description_label">Description</string>
+    <string name="status_label">Status</string>
+    <string name="end_date_label">End Date</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_create">Create</string>
+    <string name="button_edit">Edit</string>
+
+    <!-- Form inputs Create New Task & Edit Task -->
+    <string name="create_title">My new task</string>
+    <string name="create_description">A brand new task I just created</string>
+    <string name="status_TODO">To Do</string>
+    <string name="status_DOING">Doing</string>
+    <string name="status_DONE">Done</string>
+
 </resources>
