@@ -46,7 +46,7 @@
                 android:ems="10"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                android:labelFor="@id/create_title_label"
+                android:labelFor="@id/edit_title_label"
                 android:text="@string/create_title"
                 tools:ignore="LabelFor,DuplicateSpeakableTextCheck" />
         </TableRow>
@@ -71,7 +71,7 @@
                 android:gravity="top|start"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine"
-                android:labelFor="@id/create_desc_label"
+                android:labelFor="@id/edit_desc_label"
                 android:lines="4"
                 android:maxLines="4"
                 android:minLines="2"
