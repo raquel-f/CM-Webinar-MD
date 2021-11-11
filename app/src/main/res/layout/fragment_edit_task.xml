@@ -1,175 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/edit_task_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:context=".fragments.EditTask">
 
-    <TableLayout xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        tools:context=".fragments.EditTask">
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:paddingTop="16dp">
 
-        <TableRow
+        <TextView
+            android:id="@+id/create_task_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:text="@string/edit_task_title"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/edit_task_title"
+        <!-- Title -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_title_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_marginBottom="20dp"
+            android:hint="@string/title_label">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_title_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:gravity="center"
-                android:text="@string/edit_task_title"
-                android:textStyle="bold" />
-        </TableRow>
+                android:inputType="text"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TableRow
+        <!-- Description -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_desc_label"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:layout_marginBottom="20dp"
-            android:gravity="center">
+            android:hint="@string/description_label">
 
-            <TextView
-                android:id="@+id/edit_title_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_label" />
-
-            <EditText
-                android:id="@+id/edit_title_input"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:ems="10"
-                android:importantForAutofill="no"
-                android:inputType="textPersonName"
-                android:labelFor="@id/edit_title_label"
-                android:text="@string/create_title"
-                tools:ignore="LabelFor,DuplicateSpeakableTextCheck" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/edit_desc_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/description_label" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edit_desc_input"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:gravity="top|start"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                android:labelFor="@id/edit_desc_label"
+                android:inputType="text"
+                android:labelFor="@id/create_desc_label"
                 android:lines="4"
                 android:maxLines="4"
                 android:minLines="2"
-                android:scrollbars="vertical"
-                android:text="@string/create_description"
-                tools:ignore="LabelFor,DuplicateSpeakableTextCheck" />
+                android:scrollbars="vertical" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <!-- Status -->
+        <TextView
+            android:id="@+id/edit_status_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:layout_marginBottom="20dp"
-            android:gravity="center">
+            android:text="@string/status_label" />
 
-            <TextView
-                android:id="@+id/edit_status_label"
+        <RadioGroup
+            android:id="@+id/edit_status_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/edit_status_TODO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/status_TODO" />
+
+            <RadioButton
+                android:id="@+id/edit_status_DOING"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/status_DOING" />
+
+            <RadioButton
+                android:id="@+id/edit_status_DONE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/status_DONE" />
+        </RadioGroup>
+
+
+        <!-- Date -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_date_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/end_date_label" />
+
+        <!-- Buttons -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_edit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/status_label" />
+                android:layout_alignParentEnd="true"
+                android:text="@string/button_edit" />
 
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_status_input">
-
-                <RadioButton
-                    android:id="@+id/edit_status_TODO"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/status_TODO" />
-
-                <RadioButton
-                    android:id="@+id/edit_status_DOING"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/status_DOING" />
-
-                <RadioButton
-                    android:id="@+id/edit_status_DONE"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/status_DONE" />
-            </RadioGroup>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/edit_date_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/end_date_label" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:gravity="center">
-
-            <CalendarView
-                android:id="@+id/edit_date_input"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_span="2" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center">
-
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/edit_cancel_button"
-                style="?android:attr/buttonBarButtonStyle"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_weight="2"
+                android:layout_marginEnd="12dp"
+                android:layout_toStartOf="@id/edit_edit_button"
                 android:text="@string/button_cancel" />
 
-            <Button
-                android:id="@+id/edit_edit_button"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_weight="1"
-                android:text="@string/button_edit" />
-        </TableRow>
+        </RelativeLayout>
 
-    </TableLayout>
+    </LinearLayout>
 </ScrollView>

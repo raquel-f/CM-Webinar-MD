@@ -24,8 +24,6 @@ import java.util.TimeZone;
 
 public class CreateTask extends Fragment {
 
-    // TODO test
-
     private TaskViewModel viewModel;
     private FragmentSwitcher fragmentSwitcher;
 
@@ -58,6 +56,7 @@ public class CreateTask extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_create_task, container, false);
 
+        // date picker
         MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select Final Date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds());
