@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.raquel.todoappdesign.FragmentSwitcher;
 import com.raquel.todoappdesign.MainActivity;
 import com.raquel.todoappdesign.R;
@@ -22,12 +22,10 @@ import com.raquel.todoappdesign.viewmodel.TaskViewModel;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.TimeZone;
 
 
 public class EditTask extends Fragment {
-
-    // TODO test
 
     private static final String TASK_KEY = "task_key";
     private Task task;
@@ -73,7 +71,12 @@ public class EditTask extends Fragment {
         String desc = task.getDescription();
         Status status = task.getStatus();
         Date date = task.getEndDate();
-        List<Task> modelTasks = null;
+
+        // date picker
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Final Date")
+                .setSelection(date.getTime());
+        final MaterialDatePicker datePicker = builder.build();
 
         // get the input widgets
         TextView titleView = v.findViewById(R.id.edit_title_input);
@@ -82,38 +85,39 @@ public class EditTask extends Fragment {
         RadioButton radioTODO = v.findViewById(R.id.edit_status_TODO);
         RadioButton radioDOING = v.findViewById(R.id.edit_status_DOING);
         RadioButton radioDONE = v.findViewById(R.id.edit_status_DONE);
-        CalendarView calendarView = v.findViewById(R.id.edit_date_input);
         Button cancelB = v.findViewById(R.id.edit_cancel_button);
         Button editB = v.findViewById(R.id.edit_edit_button);
+        Button dateB = v.findViewById(R.id.edit_date_label);
 
-        // set calendar change listener
-        calendarView.setOnDateChangeListener((view, year, month, day) -> {
-            Calendar c = Calendar.getInstance();
-            c.set(year, month, day);
-            long endTime = c.getTimeInMillis();
-            calendarView.setDate(endTime);
+        // end date for task
+        final Date[] selectedDate = new Date[1];
+
+        // set date button listener
+        dateB.setOnClickListener(view -> datePicker.show(getParentFragmentManager(), "DATE_PICKER"));
+
+        // set date picker listener
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTimeInMillis((Long) selection);
+            selectedDate[0] = new Date(calendar.getTimeInMillis());
         });
 
         // apply the task information in the input widgets
         titleView.setText(title);
         descView.setText(desc);
-        switch(status){
+        switch (status) {
             case TODO:
                 radioTODO.setChecked(true);
-                modelTasks = viewModel.getTodoTasks();
                 break;
             case DOING:
                 radioDOING.setChecked(true);
-                modelTasks = viewModel.getDoingTasks();
                 break;
             case DONE:
                 radioDONE.setChecked(true);
-                modelTasks = viewModel.getDoneTasks();
                 break;
             default:
                 break;
         }
-        calendarView.setDate(date.getTime());
 
         // set the button's listeners
         cancelB.setOnClickListener(view -> {
@@ -121,7 +125,6 @@ public class EditTask extends Fragment {
             fragmentSwitcher.switchTaskList();
         });
 
-        List<Task> finalModelTasks = modelTasks;
         editB.setOnClickListener(view -> {
             // get the new task information
             String newTitle = titleView.getText().toString();
@@ -130,7 +133,7 @@ public class EditTask extends Fragment {
             int selectedRadioID = radioGroup.getCheckedRadioButtonId();
             RadioButton selectedRadio = v.findViewById(selectedRadioID);
 
-            Date newDate = new Date(calendarView.getDate());
+            Date newDate = selectedDate[0];
 
             // update task main information
             task.setTitle(newTitle);
@@ -139,21 +142,21 @@ public class EditTask extends Fragment {
 
 
             // update the task status and list
-            switch (selectedRadio.getText().toString()){
+            switch (selectedRadio.getText().toString()) {
                 case "To Do":
-                    if(status != Status.TODO) {
+                    if (status != Status.TODO) {
                         task.setStatus(Status.TODO);
                         viewModel.addTaskTodo(task);
                     }
                     break;
                 case "Doing":
-                    if(status != Status.DOING) {
+                    if (status != Status.DOING) {
                         task.setStatus(Status.DOING);
                         viewModel.addTaskDoing(task);
                     }
                     break;
                 case "Done":
-                    if(status != Status.DONE) {
+                    if (status != Status.DONE) {
                         task.setStatus(Status.DONE);
                         viewModel.addTaskDone(task);
                     }
