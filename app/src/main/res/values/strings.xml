@@ -20,5 +20,7 @@
     <string name="status_TODO">To Do</string>
     <string name="status_DOING">Doing</string>
     <string name="status_DONE">Done</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>
