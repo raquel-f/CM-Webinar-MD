@@ -3,9 +3,13 @@ package com.raquel.todoappdesign.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +19,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.raquel.todoappdesign.FragmentSwitcher;
 import com.raquel.todoappdesign.MainActivity;
 import com.raquel.todoappdesign.R;
+import com.raquel.todoappdesign.viewmodel.Task;
 import com.raquel.todoappdesign.viewmodel.TaskViewModel;
+
+import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -27,6 +34,7 @@ public class TaskFragment extends Fragment {
     private FragmentSwitcher fragmentSwitcher;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private MyTaskRecyclerViewAdapter adapter;
 
     @SuppressWarnings("unused")
     public static TaskFragment newInstance(int columnCount) {
@@ -70,8 +78,8 @@ public class TaskFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        // TODO change list of tasks as needed
-        recyclerView.setAdapter(new MyTaskRecyclerViewAdapter(viewModel.getTodoTasks(), fragmentSwitcher, viewModel));
+        adapter = new MyTaskRecyclerViewAdapter(viewModel.getTodoTasks(), fragmentSwitcher, viewModel);
+        recyclerView.setAdapter(adapter);
 
         // set button onClick event listener
         FloatingActionButton button = view.findViewById(R.id.addTaskButton);
@@ -83,5 +91,32 @@ public class TaskFragment extends Fragment {
         });
 
         return view;
+    }
+
+    // Menu stuff
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.list_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        List<Task> newList;
+
+        if (item.getItemId() == R.id.todo) {
+            newList = viewModel.getTodoTasks();
+        } else if (item.getItemId() == R.id.doing) {
+            newList = viewModel.getDoingTasks();
+        } else if (item.getItemId() == R.id.done) {
+            newList = viewModel.getDoneTasks();
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+
+        adapter.setDataSet(newList);
+        adapter.notifyDataSetChanged();
+
+        return true;
     }
 }
