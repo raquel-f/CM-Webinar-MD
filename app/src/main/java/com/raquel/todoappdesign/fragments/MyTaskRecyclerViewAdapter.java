@@ -25,7 +25,7 @@ import java.util.Locale;
  */
 public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Task> mValues;
+    private List<Task> mValues;
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
     private final FragmentSwitcher fragmentSwitcher;
     private final TaskViewModel viewModel;
@@ -124,6 +124,10 @@ public class MyTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyTaskRecycl
             return 0;
         }
         return mValues.size();
+    }
+
+    public void setDataSet(List<Task> newValues){
+        mValues = newValues;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
