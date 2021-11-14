@@ -3,19 +3,19 @@ package com.raquel.todoappdesign.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.raquel.todoappdesign.FragmentSwitcher;
 import com.raquel.todoappdesign.MainActivity;
 import com.raquel.todoappdesign.R;
@@ -68,55 +68,68 @@ public class TaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        setHasOptionsMenu(true);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
 
         // Get context
         Context context = view.getContext();
 
-        //get recyclerView
+        // Get DrawerLayout
+        DrawerLayout drawerLayout = view.findViewById(R.id.drawer_layout);
+
+        // Get the app toolbar
+        Toolbar toolbar = ((MainActivity) requireActivity()).findViewById(R.id.toolbar);
+
+        // Create the Drawer Toggle Button
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(requireActivity(), drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        toggle.setDrawerIndicatorEnabled(true);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // Get the Drawer
+        NavigationView drawer = view.findViewById(R.id.navigationView);
+
+        // Set the drawer listener
+        drawer.setNavigationItemSelectedListener(item -> {
+            List<Task> newList;
+
+            // set the correct list
+            if (item.getItemId() == R.id.todo) {
+                newList = viewModel.getTodoTasks();
+            } else if (item.getItemId() == R.id.doing) {
+                newList = viewModel.getDoingTasks();
+            } else if (item.getItemId() == R.id.done) {
+                newList = viewModel.getDoneTasks();
+            } else {
+                return false;
+            }
+
+            // Change the ui
+            adapter.setDataSet(newList);
+            adapter.notifyDataSetChanged();
+
+            // Close the drawer
+            drawerLayout.closeDrawer(drawer);
+
+            return true;
+        });
+
+
+        // Get recyclerView
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        // Create and set the recycler view adapter
         adapter = new MyTaskRecyclerViewAdapter(viewModel.getTodoTasks(), fragmentSwitcher, viewModel);
         recyclerView.setAdapter(adapter);
 
-        // set button onClick event listener
+        // Set button onClick event listener
         FloatingActionButton button = view.findViewById(R.id.addTaskButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                fragmentSwitcher.switchCreateTask();
-            }
-        });
+        button.setOnClickListener(view1 -> fragmentSwitcher.switchCreateTask());
 
         return view;
-    }
-
-    // Menu stuff
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.list_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        List<Task> newList;
-
-        if (item.getItemId() == R.id.todo) {
-            newList = viewModel.getTodoTasks();
-        } else if (item.getItemId() == R.id.doing) {
-            newList = viewModel.getDoingTasks();
-        } else if (item.getItemId() == R.id.done) {
-            newList = viewModel.getDoneTasks();
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-
-        adapter.setDataSet(newList);
-        adapter.notifyDataSetChanged();
-
-        return true;
     }
 }
